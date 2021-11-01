@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://dibyn7:dibyn7@devconnector.fspwk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://dibyn7:dibyn7@devconnector.fspwk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jwtSecret": "mySecretToken"
 }
