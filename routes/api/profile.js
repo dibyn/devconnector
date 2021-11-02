@@ -65,11 +65,11 @@ router.post(
     }
     //  Build social object
     profileFields.social = {}
-    if (youtube) profileFields.youtube = youtube
-    if (facebook) profileFields.facebook = facebook
-    if (twitter) profileFields.twitter = twitter
-    if (linkedin) profileFields.linkedin = linkedin
-    if (instagram) profileFields.instagram = instagram
+    if (youtube) profileFields.social.youtube = youtube
+    if (facebook) profileFields.social.facebook = facebook
+    if (twitter) profileFields.social.twitter = twitter
+    if (linkedin) profileFields.social.linkedin = linkedin
+    if (instagram) profileFields.social.instagram = instagram
     try {
       let profile = await Profile.findOne({ user: req.user.id })
       if (profile) {
@@ -79,11 +79,11 @@ router.post(
           { $set: profileFields },
           { new: true }
         )
+        return res.json(profile)
       }
       // Create
-      console.log({profileFields})
       profile = new Profile(profileFields)
-      await Profile.save()
+      await profile.save()
       res.json(profile)
     } catch (error) {
       console.log(error)
@@ -92,4 +92,51 @@ router.post(
     res.send('Hello')
   }
 )
+//@route GET api/profile
+//@desc get all profile
+//@access Public
+router.get('/', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name', 'avatar'])
+    console.log({ profiles })
+    res.json(profiles)
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server Error')
+  }
+})
+//@route GET api/profile/user/:user_id
+//@desc get profile by id
+//@access Public
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate('user', ['name', 'avatar'])
+    if (!profile) return res.status(400).json({ msg: 'Profile not found' })
+    return res.json(profile)
+  } catch (error) {
+    console.error(error.message)
+    if (error.kind === 'ObjectId')
+      return res.status(400).json({ msg: 'Profile not found' })
+    res.status(500).send('Server Error')
+  }
+})
+//@route DELETE api/profile
+//@desc delete profile, user and posts
+//@access Private
+router.delete('/', auth, async (req, res) => {
+  try {
+    //@todos - remove user posts
+
+    //remove profile
+    await Profile.findOneAndDelete({ user: req.user.id })
+    //remove user
+    await User.findOneAndDelete({ _id: req.user.id })
+    res.json({ msg: 'User removed'})
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).send('Server Error')
+  }
+})
 module.exports = router
