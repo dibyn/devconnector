@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { setAlert } from '../../actions/alert'
+import { register } from '../../actions/auth'
 // import axios from 'axios'
 const Register = () => {
   const dispatch = useDispatch()
@@ -19,18 +20,12 @@ const Register = () => {
     if (password !== password2) {
       dispatch(setAlert('Password do not match', 'danger'))
     } else {
-      console.log('Success')
-      // try {
-      //   const data = {
-      //     name,
-      //     email,
-      //     password,
-      //   }
-      //   const res = await axios.post('/api/users', data)
-      //   console.log({ response: res.data })
-      // } catch (error) {
-      //   console.log(error.response.data)
-      // }
+      const data = {
+        name,
+        email,
+        password,
+      }
+      dispatch(register(data))
     }
   }
   return (
@@ -47,7 +42,7 @@ const Register = () => {
             name='name'
             value={name}
             onChange={(e) => onChange(e)}
-            required
+            // required
           />
         </div>
         <div className='form-group'>
@@ -57,7 +52,7 @@ const Register = () => {
             name='email'
             value={email}
             onChange={(e) => onChange(e)}
-            required
+            // required
           />
           <small className='form-text'>
             This site uses Gravatar so if you want a profile image, use a
@@ -69,7 +64,7 @@ const Register = () => {
             type='password'
             placeholder='Password'
             name='password'
-            minLength='6'
+            // minLength='6'
             value={password}
             onChange={(e) => onChange(e)}
           />
@@ -79,7 +74,7 @@ const Register = () => {
             type='password'
             placeholder='Confirm Password'
             name='password2'
-            minLength='6'
+            // minLength='6'
             value={password2}
             onChange={(e) => onChange(e)}
           />
@@ -92,5 +87,4 @@ const Register = () => {
     </Fragment>
   )
 }
-Register.prototype = {}
 export default Register
