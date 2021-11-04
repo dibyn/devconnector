@@ -1,4 +1,4 @@
-import { GET_PROFILE, PROFILE_ERROR } from '../types'
+import { CLEAR_PROFILE, GET_PROFILE, PROFILE_ERROR } from '../types'
 const initialState = {
   profile: null,
   profiles: [],
@@ -16,6 +16,15 @@ const profileReducer = (state = initialState, { type, payload }) => {
         error: payload,
         loading: false,
       }
+    case CLEAR_PROFILE:
+      return {
+        ...state,
+        profile: null,
+        repos: [],
+        loading: false,
+        error: {}
+      }
+
     default:
       return state
   }

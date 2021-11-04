@@ -31,7 +31,7 @@ const authReducer = (state = initialState, { type, payload }) => {
     case LOGIN_FAIL:
     case LOGOUT:
       localStorage.removeItem('token')
-      return { ...state, token: null, isAuthenticated: false, loading: false }
+      return { ...state, token: null, isAuthenticated: false, loading: false, user: null }
     default:
       return state
   }

@@ -10,12 +10,12 @@ import Login from './components/authentication/Login'
 import Alert from './components/layout/Alert'
 import { loadUser } from './actions/auth'
 import Dashboard from './components/dashboard'
+import CreateProfile from './components/profile-form/CreateProfile'
 import PrivateRoute from './components/routing/PrivateRoute'
 import './App.css'
-if (localStorage.getItem('token')) {
-  setAuthToken(localStorage.getItem('token'))
-}
 const App = () => {
+  const token = localStorage.getItem('token')
+  if (token) setAuthToken(token)
   useEffect(() => {
     store.dispatch(loadUser())
   }, [])
@@ -30,6 +30,7 @@ const App = () => {
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
             <PrivateRoute path='/dashboard' component={Dashboard} />
+            <PrivateRoute path='/create-profile' component={CreateProfile} />
           </section>
         </Switch>
       </Router>
