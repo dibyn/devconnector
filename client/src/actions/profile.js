@@ -10,13 +10,14 @@ export const getCurrentProfile = () => async (dispatch) => {
     })
   } catch (error) {
     console.log({ error })
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    })
+    error.response &&
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: {
+          msg: error.response.statusText,
+          status: error.response.status,
+        },
+      })
   }
 }
 export const createOrUpdateProfile =
@@ -31,15 +32,17 @@ export const createOrUpdateProfile =
       dispatch(setAlert(edit ? 'Profile Upload' : 'Profile Created', 'success'))
       if (!edit) history.push('/dashboard')
     } catch (error) {
-      const errors = error.response.data.errors
+      console.log({ error: error.response })
+      const errors = error?.response?.data.errors
       if (errors) errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')))
-      dispatch({
-        type: PROFILE_ERROR,
-        payload: {
-          msg: error.response.statusText,
-          status: error.response.status,
-        },
-      })
+      error.response &&
+        dispatch({
+          type: PROFILE_ERROR,
+          payload: {
+            msg: error.response.statusText,
+            status: error.response.status,
+          },
+        })
     }
   }
 export const addExperience = (formData, history) => async (dispatch) => {
@@ -52,15 +55,16 @@ export const addExperience = (formData, history) => async (dispatch) => {
     dispatch(setAlert('Experience Added', 'success'))
     history.push('/dashboard')
   } catch (error) {
-    const errors = error.response.data.errors
+    const errors = error?.response?.data.errors
     if (errors) errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')))
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
-    })
+    error.response &&
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: {
+          msg: error.response.statusText,
+          status: error.response.status,
+        },
+      })
   }
 }
 export const addEducation = (formData, history) => async (dispatch) => {
@@ -73,14 +77,49 @@ export const addEducation = (formData, history) => async (dispatch) => {
     dispatch(setAlert('Education Added', 'success'))
     history.push('/dashboard')
   } catch (error) {
-    const errors = error.response.data.errors
+    console.log({ error1: error, error: error.response })
+    const errors = error?.response?.data.errors
     if (errors) errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')))
+    error.response &&
+      dispatch({
+        type: PROFILE_ERROR,
+        payload: {
+          msg: error.response.statusText,
+          status: error.response.status,
+        },
+      })
+  }
+}
+// Delete experience
+export const deleteExperience = (id) => async (dispatch) => {
+  try {
+    const response = await axios.delete(`/api/profile/experience/${id}`)
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: response.data,
+    })
+    dispatch(setAlert('Experience Removed', 'success'))
+  } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.statusText,
-        status: error.response.status,
-      },
+      payload: { msg: err.response.statusText, status: err.response.status },
+    })
+  }
+}
+// Delete education
+export const deleteEducation = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profile/education/${id}`)
+
+    dispatch({
+      type: UPDATE_PROFILE,
+      payload: res.data,
+    })
+    dispatch(setAlert('Education Removed', 'success'))
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status },
     })
   }
 }
