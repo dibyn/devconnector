@@ -17,6 +17,8 @@ import './App.css'
 import AddEducation from './components/profile-form/AddEducation'
 import AddExperience from './components/profile-form/AddExperience'
 import Profiles from './components/Profiles'
+import Profile from './components/profille'
+
 const App = () => {
   const token = localStorage.getItem('token')
   if (token) setAuthToken(token)
@@ -34,6 +36,7 @@ const App = () => {
             <Route exact path='/register' component={Register} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/profiles' component={Profiles} />
+            <Route exact path='/profile/:id' component={Profile} />
             <PrivateRoute path='/dashboard' component={Dashboard} />
             <PrivateRoute path='/create-profile' component={CreateProfile} />
             <PrivateRoute path='/edit-profile' component={EditProfile} />
