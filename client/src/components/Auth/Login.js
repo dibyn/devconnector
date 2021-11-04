@@ -1,7 +1,11 @@
 import React, { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, Redirect } from 'react-router-dom'
+import { login } from '../../actions/auth'
 // import axios from 'axios'
 const Login = () => {
+  const { isAuthenticated } = useSelector((state) => state.authentication)
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -11,19 +15,15 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   const onSubmit = async (e) => {
     e.preventDefault()
-    console.log('Success')
-    // try {
-    //   const data = {
-    //     name,
-    //     email,
-    //     password,
-    //   }
-    //   const res = await axios.post('/api/users', data)
-    //   console.log({ response: res.data })
-    // } catch (error) {
-    //   console.log(error.response.data)
-    // }
+    dispatch(
+      login({
+        email,
+        password,
+      })
+    )
   }
+  // redirecr if logged in
+  if (isAuthenticated) return <Redirect to='/dashboard' />
   return (
     <Fragment>
       <h1 className='large text-primary'>Sign In</h1>

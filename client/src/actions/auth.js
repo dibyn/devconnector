@@ -5,6 +5,8 @@ import {
   REGISTER_FAIL,
   USER_LOADED_SUCCESS,
   AUTH_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
 } from '../types'
 import setAuthToken from '../utils/setAuthToken'
 import axios from 'axios'
@@ -36,6 +38,21 @@ export const register = (payload) => async (dispatch) => {
     if (errors) errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')))
     dispatch({
       type: REGISTER_FAIL,
+    })
+  }
+}
+export const login = (payload) => async (dispatch) => {
+  try {
+    const response = await Axios.post('/api/auth', payload)
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: response.data,
+    })
+  } catch (error) {
+    const errors = error.response.data.errors
+    if (errors) errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')))
+    dispatch({
+      type: LOGIN_FAIL,
     })
   }
 }
