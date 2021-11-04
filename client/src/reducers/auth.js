@@ -5,6 +5,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from '../types'
 const initialState = {
   token: localStorage.getItem('token'),
@@ -28,6 +29,7 @@ const authReducer = (state = initialState, { type, payload }) => {
     case AUTH_ERROR:
     case REGISTER_FAIL:
     case LOGIN_FAIL:
+    case LOGOUT:
       localStorage.removeItem('token')
       return { ...state, token: null, isAuthenticated: false, loading: false }
     default:
