@@ -3,6 +3,9 @@ import {
   GET_PROFILE,
   PROFILE_ERROR,
   UPDATE_PROFILE,
+  GET_PROFILES,
+  NO_REPOS,
+  GET_REPOS,
 } from '../types'
 const initialState = {
   profile: null,
@@ -16,6 +19,12 @@ const profileReducer = (state = initialState, { type, payload }) => {
     case GET_PROFILE:
     case UPDATE_PROFILE:
       return { ...state, profile: payload, loading: false }
+    case GET_PROFILES:
+      return {
+        ...state,
+        profiles: payload,
+        loading: false,
+      }
     case PROFILE_ERROR:
       return {
         ...state,
@@ -30,7 +39,8 @@ const profileReducer = (state = initialState, { type, payload }) => {
         loading: false,
         error: {},
       }
-
+    case GET_REPOS:
+      return { ...state, repos: payload, loading: false }
     default:
       return state
   }

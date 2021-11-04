@@ -6,6 +6,11 @@ const Navbar = () => {
   const { loading, isAuthenticated } = useSelector(
     (state) => state.authentication
   )
+  const common = (
+    <li>
+      <Link to='/profiles'>Developers</Link>
+    </li>
+  )
   const authLinks = (
     <ul>
       <li>
@@ -20,13 +25,12 @@ const Navbar = () => {
           <span className='hide-sm'> Logout</span>
         </a>
       </li>
+      {common}
     </ul>
   )
   const guestLinks = (
     <ul>
-      <li>
-        <Link to='/'>Developers</Link>
-      </li>
+      {common}
       <li>
         <Link to='/register'>Register</Link>
       </li>
