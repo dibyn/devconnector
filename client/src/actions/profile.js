@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from '../types'
+import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE, ACCOUNT_DELETED, CLEAR_PROFILE, LOGOUT } from '../types'
 import { setAlert } from './alert'
 export const getCurrentProfile = () => async (dispatch) => {
   try {
@@ -123,3 +123,19 @@ export const deleteEducation = (id) => async (dispatch) => {
     })
   }
 }
+export const deleteAccount = () => async (dispatch) => {
+  if (window.confirm('Are you sure? This can NOT be undone!')) {
+    try {
+      await axios.delete('/api/profile');
+      dispatch({ type: CLEAR_PROFILE });
+      dispatch({ type: ACCOUNT_DELETED });
+      dispatch({ type: LOGOUT });
+      dispatch(setAlert('Your account has been permanently deleted'));
+    } catch (err) {
+      err.response && dispatch({
+        type: PROFILE_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
+  }
+};
